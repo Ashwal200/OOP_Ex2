@@ -1,8 +1,6 @@
 package Ex2_1;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Random;
 import java.util.concurrent.*;
 import java.util.logging.*;
@@ -66,25 +64,16 @@ public class Ex2_1 {
         Random rand = new Random(seed);
         for (int i = 1; i <= n; i++) {
             fileString[i-1] = "file_"+i;
-            Logger logger = Logger.getLogger("MyLog");
-            FileHandler fh;
+            File file = new File("file_"+i);
 
             try {
-                // This block configure the logger with handler and formatter
-                fh = new FileHandler("file_" + i);
-                logger.addHandler(fh);
-                SimpleFormatter formatter = new SimpleFormatter();
-                fh.setFormatter(formatter);
-                fh.setFormatter(new MyCustomFormatter());
-                logger.setUseParentHandlers(false);
 
-                // the following statement is used to log any messages
+                BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 
                 int randomNumber = rand.nextInt(bound);
                 for (int j = 0; j < randomNumber; j++)
                 {
-                    logger.info("DONT WANNA CLOSE MY EYES I DONT WANNA FALL ASLEEP!\n");
-
+                    writer.write("DONT WANNA CLOSE MY EYES I DONT WANNA FALL ASLEEP!\n");
                 }
             }
             catch (SecurityException e)
@@ -116,13 +105,13 @@ public class Ex2_1 {
         }
         long end = System.currentTimeMillis();
         long elapsed = end - start;
-        System.out.println("Elapsed time ThreadPool: " + elapsed/1000.0 + " milliseconds");
+        System.out.println("Elapsed time: " + elapsed/1000.0 + " milliseconds");
         return numberOfLIne;
 
     }
 
 
-    //#################################################
+
     /**
      * QUESTIONS 3
      * @param fileNames array that contains the name of the file that we create.
@@ -144,7 +133,7 @@ public class Ex2_1 {
         }
         long end_Thread = System.currentTimeMillis();
         long elapsed_Thread = end_Thread - start_Thread;
-        System.out.println("Elapsed time ThreadPool: " + elapsed_Thread/1000.0 + " milliseconds");
+        System.out.println("Elapsed time Thread: " + elapsed_Thread/1000.0 + " milliseconds");
         return numberOfLIne;
         }
 
