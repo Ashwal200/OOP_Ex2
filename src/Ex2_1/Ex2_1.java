@@ -1,10 +1,10 @@
+package Ex2_1;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Arrays;
 import java.util.Random;
+import java.util.concurrent.*;
 import java.util.logging.*;
 
 
@@ -56,10 +56,10 @@ public class Ex2_1 {
      * Output: The function creates n text files on disk and returns an array
      * of the file names. In each line you can write a sentence like "World Hello"
      * containing at least 10 characters.
-     * @param n
-     * @param seed
-     * @param bound
-     * @return
+     * @param n number of files to create.
+     * @param seed The seed is the initial value of the internal state of the pseudorandom number generator.
+     * @param bound define the range so that numbers can be greater than or equal to zero and less than the bound value.
+     * @return array that contains the name of the file that we create.
      */
     public static String[] createTextFiles(int n, int seed, int bound) {
         String fileString[] = new String[n];
@@ -71,7 +71,7 @@ public class Ex2_1 {
 
             try {
                 // This block configure the logger with handler and formatter
-                fh = new FileHandler("C:\\Users\\ashwa\\Desktop\\Ex2\\file_" + i);
+                fh = new FileHandler("file_" + i);
                 logger.addHandler(fh);
                 SimpleFormatter formatter = new SimpleFormatter();
                 fh.setFormatter(formatter);
@@ -102,31 +102,35 @@ public class Ex2_1 {
 
     /**
      * QUESTIONS 2
-     * A function must be written
-     * public static int getNumOfLines(String[] fileNames){…}
-     * Input: an array that contains the file names.
-     * Output: the total number of lines of the files.
-     *
-     * @param fileNames
-     * @return
+     * This function get an array that contains the file names.
+     * And count the total number of lines of the files.
+     * @param fileNames array that contains the name of the file that we create.
+     * @return numbers of the entire lines in all the files together.
      */
     public static int getNumOfLines(String[] fileNames){
+        long start = System.currentTimeMillis();
         int numberOfLIne = 0;
         for (String file : fileNames) {
             int tempNumberOfLIne = readFile(file);
             numberOfLIne += tempNumberOfLIne;
         }
+        long end = System.currentTimeMillis();
+        long elapsed = end - start;
+        System.out.println("Elapsed time ThreadPool: " + elapsed/1000.0 + " milliseconds");
         return numberOfLIne;
+
     }
 
 
     //#################################################
     /**
      * QUESTIONS 3
-     * @param fileNames
-     * @return
+     * @param fileNames array that contains the name of the file that we create.
+     * @return numbers of the entire lines in all the files together.
+     *
      */
-    public static int getNumOfLinesThreads(String[] fileNames) throws InterruptedException {
+    public int getNumOfLinesThreads(String[] fileNames) throws InterruptedException {
+        long start_Thread = System.currentTimeMillis();
         MyThread threadList[] = new MyThread[fileNames.length];
         int numberOfLIne =0;
 
@@ -137,54 +141,50 @@ public class Ex2_1 {
         for (int i = 0 ; i < fileNames.length ; i++) {
             threadList[i].join();
             numberOfLIne += threadList[i].getNumOfLine();
-
         }
-
+        long end_Thread = System.currentTimeMillis();
+        long elapsed_Thread = end_Thread - start_Thread;
+        System.out.println("Elapsed time ThreadPool: " + elapsed_Thread/1000.0 + " milliseconds");
         return numberOfLIne;
         }
 
     /**
      * QUESTIONS 4
-     * @param fileNames
-     * @return
+     * @param fileNames array that contains the name of the file that we create.
+     * @return numbers of the entire lines in all the files together.
+     *
      */
-    public static int getNumOfLinesThreadPool(String[]fileNames){
-        MyThreadPool mtp = new MyThreadPool();
-        mtp.runThreadPool(fileNames.length , fileNames);
-        return 0;}
+    public  int getNumOfLinesThreadPool(String[]fileNames){
+            long startTime = System.currentTimeMillis();
+            int totalLines = 0;
+            ExecutorService pool = Executors.newFixedThreadPool(fileNames.length);
+            Future<Integer> [] futures = new Future[fileNames.length];
+            int index = 0;
+            for (String filename: fileNames) {
+                Callable<Integer> counter = new MyThreadPool(filename);
+                Future<Integer> future = pool.submit(counter);
+                futures[index++] = (future);
+            }
+            for (Future<Integer> future : futures) {
+                try {
+                    totalLines += future.get();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                } catch (ExecutionException e) {
+                    throw new RuntimeException(e);
+                }
+            }
 
-
-
-    public static void main (String[]args) throws InterruptedException {
-
-        String st[] = createTextFiles(7,2,600);
-        System.out.println("Q_1 :");
-        System.out.println(Arrays.toString(st));
-
-        System.out.println("Q_2 :");
-        Instant start = Instant.now();
-        System.out.println(getNumOfLines(st));
-        Instant end = Instant.now();
-        Duration elapsed = Duration.between(start, end);
-        System.out.println("Elapsed time: " + elapsed.toMillis() + " milliseconds");
-
-
-        System.out.println("Q_3 Thread :");
-        Instant start_Thread = Instant.now();
-        System.out.println(getNumOfLinesThreads(st));
-        Instant end_Thread = Instant.now();
-        Duration elapsed_Thread = Duration.between(start_Thread, end_Thread);
-        System.out.println("Elapsed time Thread: " + elapsed_Thread.toMillis() + " milliseconds");
-//
-        System.out.println("Q_4 Thread Pool:");
-        Instant start_ThreadPool = Instant.now();
-        System.out.println(getNumOfLinesThreads(st));
-        Instant end_ThreadPool = Instant.now();
-        Duration elapsed_ThreadPool = Duration.between(start_ThreadPool, end_ThreadPool);
-        System.out.println("Elapsed time ThreadPool: " + elapsed_ThreadPool.toMillis() + " milliseconds");
-        getNumOfLinesThreadPool(st);
+            pool.shutdown();
+            long endTime = System.currentTimeMillis();
+            long elapsedTime = endTime - startTime;
+            System.out.println("Elapsed time: " + elapsedTime/1000.0 + " milliseconds");
+            return totalLines;
 
     }
+
+
+
 
 }
 
