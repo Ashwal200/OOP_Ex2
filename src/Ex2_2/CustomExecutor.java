@@ -85,10 +85,9 @@ public class CustomExecutor extends ThreadPoolExecutor {
      * @return a {@code RunnableFuture} for the given callable task.
      */
     public <T> Future<T> submit(Task<T> task) {
-        for (int i = 1; i < 11; i++) {
-            if (task.taskType.getPriorityValue() == i) arrayOfPriority[i-1]++;
-            break;
-        }
+        int taskType = task.taskType.getPriorityValue();
+        if (0 < taskType && taskType < 11) arrayOfPriority[taskType-1]++;
+
         if (task == null){
             throw new NullPointerException();
         }
