@@ -51,7 +51,9 @@ public class CustomExecutor extends ThreadPoolExecutor {
      */
     protected void beforeExecute(Thread t, Runnable r) {
         int updateCheck = getCurrentMax();
+        if (updateCheck > 0){
         arrayOfPriority[updateCheck-1]--;
+        }
     }
 
     /**
@@ -59,6 +61,7 @@ public class CustomExecutor extends ThreadPoolExecutor {
      * @param task the task to submit
      * @return a new Task.
      */
+    @Override
     public <T> Future<T> submit(Callable<T> task) {
         return submit(createTask(task));
     }

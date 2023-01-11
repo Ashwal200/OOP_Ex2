@@ -26,14 +26,8 @@ public class Ex2_1 {
         try {
             FileReader fr = new FileReader(fileName);
             BufferedReader br = new BufferedReader(fr);
-            String str;
-            str = br.readLine();
-            numOfLine++;
-            for(int i=1; str!=null; i=i+1) {
-                str = br.readLine();
-                if (str != null){
-                    numOfLine++;
-                }
+            while (br.readLine() != null) {
+                numOfLine++;
             }
             br.close();
             fr.close();
@@ -64,11 +58,11 @@ public class Ex2_1 {
         Random rand = new Random(seed);
         for (int i = 1; i <= n; i++) {
             fileString[i-1] = "file_"+i;
-            File file = new File("file_"+i);
 
             try {
 
-                BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                File file = new File("file_"+i);
+                FileWriter writer = new FileWriter(file);
 
                 int randomNumber = rand.nextInt(bound);
                 for (int j = 0; j < randomNumber; j++)
@@ -163,7 +157,6 @@ public class Ex2_1 {
                     throw new RuntimeException(e);
                 }
             }
-
             pool.shutdown();
             long endTime = System.currentTimeMillis();
             long elapsedTime = endTime - startTime;

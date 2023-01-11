@@ -9,12 +9,11 @@ import java.io.IOException;
  * the file and in the run function the number of lines of this file must be calculated.
  * and calculates the number of lines in the same file.
  */
-public class MyThread extends Thread{
+public class MyThread extends Thread {
     String fileName;
     int numOfLine;
 
     /**
-     *
      * @return the number of lines in the files.
      */
     int getNumOfLine() {
@@ -22,7 +21,6 @@ public class MyThread extends Thread{
     }
 
     /**
-     *
      * @param numOfLine count each file lines in add it all together.
      */
     private void setNumOfLine(int numOfLine) {
@@ -31,12 +29,13 @@ public class MyThread extends Thread{
 
     /**
      * Constructor to threads.
-     * @param name the name of the thread.
+     *
+     * @param name     the name of the thread.
      * @param fileName the name of the files.
      */
-    public MyThread(String name , String fileName){
+    public MyThread(String name, String fileName) {
         super(name);
-        this.fileName= fileName;
+        this.fileName = fileName;
         this.numOfLine = numOfLine;
     }
 
@@ -48,18 +47,12 @@ public class MyThread extends Thread{
         try {
             FileReader fr = new FileReader(fileName);
             BufferedReader br = new BufferedReader(fr);
-            String str;
-            str = br.readLine();
-            int counter = 1;
-            for (int i = 1; str != null; i = i + 1) {
-                str = br.readLine();
-                if (str != null) {
-                    counter++;
-                }
+            int counter = 0;
+            while (br.readLine() != null) {
+                counter++;
             }
             setNumOfLine(counter);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         System.out.println(this.getName() + "  DONE!");
