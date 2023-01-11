@@ -8,18 +8,12 @@ import java.util.logging.*;
 
 
 public class Ex2_1 {
-    // help class!!!!
-    public static class MyCustomFormatter extends Formatter {
-        @Override
-        public String format(LogRecord message) {
-            StringBuffer sb = new StringBuffer();
-            sb.append(message.getLevel());
-            sb.append(": ");
-            sb.append(message.getMessage());
-            return sb.toString();
-        }
-    }
-    // help function!
+
+    /**
+     * Count the number of lines.
+     * @param fileName the file that we are working on.
+     * @return the total lines in the file.
+     */
     public static int readFile (String fileName){
         int numOfLine = 0;
         //		 try read from the file
@@ -44,10 +38,9 @@ public class Ex2_1 {
      * QUESTIONS 1
      * n - a natural number representing the number of text files.
      * The number of lines in each file is a random number, obtained with the help of a usage of Random class <br>
-     * And in the seed and bound parameters.
-     * Output: The function creates n text files on disk and returns an array
-     * of the file names. In each line you can write a sentence like "World Hello"
-     * containing at least 10 characters.
+     * And in the seed and bound parameters.<br>
+     * Output: The function creates n text files on disk and returns an array of the file names.<br>
+     * If file exist it Overwrite the file and build new one.
      * @param n number of files to create.
      * @param seed The seed is the initial value of the internal state of the pseudorandom number generator.
      * @param bound define the range so that numbers can be greater than or equal to zero and less than the bound value.

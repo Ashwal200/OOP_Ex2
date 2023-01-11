@@ -4,10 +4,10 @@ import java.util.Arrays;
 
 public class main {
     static Ex2_1 ex = new Ex2_1();
-    String st[] = ex.createTextFiles(100,3,10000);
+
     public static void main (String[]args) throws InterruptedException {
 
-        String st[] = ex.createTextFiles(100,2,100);
+        String st[] = ex.createTextFiles(100,5,100);
         System.out.println("Q_1 :");
         System.out.println(Arrays.toString(st));
 
