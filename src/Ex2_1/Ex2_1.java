@@ -105,7 +105,7 @@ public class Ex2_1 {
      * @return numbers of the entire lines in all the files together.
      *
      */
-    public int getNumOfLinesThreads(String[] fileNames) throws InterruptedException {
+    public int getNumOfLinesThreads(String[] fileNames)  {
         long start_Thread = System.currentTimeMillis();
         MyThread threadList[] = new MyThread[fileNames.length];
         int numberOfLIne =0;
@@ -115,7 +115,12 @@ public class Ex2_1 {
             threadList[i].start();
         }
         for (int i = 0 ; i < fileNames.length ; i++) {
-            threadList[i].join();
+            try {
+                threadList[i].join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
             numberOfLIne += threadList[i].getNumOfLine();
         }
         long end_Thread = System.currentTimeMillis();
@@ -145,8 +150,10 @@ public class Ex2_1 {
                 try {
                     totalLines += future.get();
                 } catch (InterruptedException e) {
+                    e.printStackTrace();
                     throw new RuntimeException(e);
                 } catch (ExecutionException e) {
+                    e.printStackTrace();
                     throw new RuntimeException(e);
                 }
             }

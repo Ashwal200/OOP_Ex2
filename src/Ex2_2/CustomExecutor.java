@@ -10,7 +10,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public class CustomExecutor extends ThreadPoolExecutor {
 
-    private int arrayOfPriority[]= {0,0,0};
+    private int arrayOfPriority[]= new int[10];
     static int numCores = Runtime.getRuntime().availableProcessors();
     private final TaskType defaultType = OTHER;
 
@@ -85,10 +85,10 @@ public class CustomExecutor extends ThreadPoolExecutor {
      * @return a {@code RunnableFuture} for the given callable task.
      */
     public <T> Future<T> submit(Task<T> task) {
-        if (task.taskType == COMPUTATIONAL) arrayOfPriority[0]++;
-        if (task.taskType == IO) arrayOfPriority[1]++;
-        if (task.taskType == OTHER) arrayOfPriority[2]++;
-
+        for (int i = 1; i < 11; i++) {
+            if (task.taskType.getPriorityValue() == i) arrayOfPriority[i-1]++;
+            break;
+        }
         if (task == null){
             throw new NullPointerException();
         }
@@ -106,7 +106,11 @@ public class CustomExecutor extends ThreadPoolExecutor {
      * Else return 0;
      */
     public int getCurrentMax(){
-        return arrayOfPriority[0] != 0 ? 1 : arrayOfPriority[1] != 0 ? 2 : arrayOfPriority[2] != 0 ? 3 : 0;
+        for (int i = 0; i < 10; i++) {
+            if (arrayOfPriority[i] > 0)
+                return i+1;
+        }
+        return 0;
     }
 
     /**
