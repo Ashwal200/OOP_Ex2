@@ -57,18 +57,18 @@ public class Ex2_1 {
         String fileString[] = new String[n];
         Random rand = new Random(seed);
         for (int i = 1; i <= n; i++) {
-            fileString[i-1] = "file_"+i;
+
 
             try {
 
-                File file = new File("file_"+i);
-                FileWriter writer = new FileWriter(file);
-
+                BufferedWriter writer = new BufferedWriter(new FileWriter("file_" + i));
+                fileString[i-1] = "file_"+i;
                 int randomNumber = rand.nextInt(bound);
                 for (int j = 0; j < randomNumber; j++)
                 {
                     writer.write("DONT WANNA CLOSE MY EYES I DONT WANNA FALL ASLEEP!\n");
                 }
+                writer.close();
             }
             catch (SecurityException e)
             {
