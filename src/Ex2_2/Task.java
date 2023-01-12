@@ -8,8 +8,8 @@ import static Ex2_2.TaskType.OTHER;
 public class Task<T> implements Comparable
         <Task<T>> , Callable<T> {
     private static final TaskType defaultType = OTHER;
-    public TaskType taskType;
-    public Callable<T> callable;
+    private TaskType taskType;
+    private Callable<T> callable;
 
     /**
      * Constructor for the Task object.
@@ -57,8 +57,8 @@ public class Task<T> implements Comparable
     @Override
     public int compareTo(Task<T> otherTask) {
         int diff = otherTask.taskType.getPriorityValue() - taskType.getPriorityValue();
-        // If true return 0, if this* is more important return -1, else return 1
-        return 0 == diff ? 0 : 0 > diff ? -1 : 1;
+        // If true return 0, if this* is more important return 1, else return -1
+        return 0 == diff ? 0 : 0 > diff ? 1 : -1;
     }
 
     /**
@@ -86,5 +86,13 @@ public class Task<T> implements Comparable
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public TaskType getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(TaskType taskType) {
+        this.taskType = taskType;
     }
 }

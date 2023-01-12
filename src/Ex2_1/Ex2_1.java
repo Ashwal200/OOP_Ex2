@@ -26,11 +26,15 @@ public class Ex2_1 {
             br.close();
             fr.close();
         }
-        catch(IOException ex) {
+        catch(FileNotFoundException ex) {
+
             System.err.print("Error reading file\n" + ex);
             ex.printStackTrace();
-            System.exit(2);
         }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return numOfLine;
     }
 
@@ -47,6 +51,8 @@ public class Ex2_1 {
      * @return array that contains the name of the file that we create.
      */
     public static String[] createTextFiles(int n, int seed, int bound) {
+        if (bound <= 0) throw new IllegalArgumentException("Enter a positive number!");
+        if (n < 0) throw new NegativeArraySizeException("Enter a positive number!");
         String fileString[] = new String[n];
         Random rand = new Random(seed);
         for (int i = 1; i <= n; i++) {

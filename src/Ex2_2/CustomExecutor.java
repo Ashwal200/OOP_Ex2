@@ -1,18 +1,14 @@
 package Ex2_2;
 
-import java.util.Arrays;
-import java.util.Objects;
 import java.util.concurrent.*;
 
 import static Ex2_2.Task.*;
-import static Ex2_2.TaskType.*;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public class CustomExecutor extends ThreadPoolExecutor {
 
-    private int arrayOfPriority[]= new int[10];
+    PriorityData priorityData =  new PriorityData();
     static int numCores = Runtime.getRuntime().availableProcessors();
-    private final TaskType defaultType = OTHER;
 
     /**
      * Constructor to CustomExecutor.<br>
@@ -42,19 +38,7 @@ public class CustomExecutor extends ThreadPoolExecutor {
         shutdown();
     }
 
-    /**
-     * Method invoked prior to executing the given Runnable in the given thread.<br>
-     * This method is invoked by thread t that will execute task r,<br>
-     * and may be used to re-initialize ThreadLocals, or to perform logging.<br>
-     * @param t the thread that will run task {@code r}
-     * @param r the task that will be executed
-     */
-    protected void beforeExecute(Thread t, Runnable r) {
-        int updateCheck = getCurrentMax();
-        if (updateCheck > 0){
-        arrayOfPriority[updateCheck-1]--;
-        }
-    }
+
 
     /**
      *
@@ -85,55 +69,39 @@ public class CustomExecutor extends ThreadPoolExecutor {
      * @return a {@code RunnableFuture} for the given callable task.
      */
     public <T> Future<T> submit(Task<T> task) {
-        int taskType = task.taskType.getPriorityValue();
-        if (0 < taskType && taskType < 11) arrayOfPriority[taskType-1]++;
-
         if (task == null){
             throw new NullPointerException();
         }
+
+        int taskTypeValid = task.getTaskType().getPriorityValue();
+        if (priorityData.validatePriority(taskTypeValid)) priorityData.arrayOfPriority[taskTypeValid-1]++;
+
         RunnableFuture<T> futureTask = newTaskFor(task);
         execute(futureTask);
         return futureTask;
     }
 
     /**
-     *
+     * Method invoked prior to executing the given Runnable in the given thread.<br>
+     * This method is invoked by thread t that will execute task r,<br>
+     * and may be used to re-initialize ThreadLocals, or to perform logging.<br>
+     * @param t the thread that will run task {@code r}
+     * @param r the task that will be executed
+     */
+    protected void beforeExecute(Thread t, Runnable r) {
+        int update = priorityData.getCurrentMax();
+        priorityData.beforeExecuteUpdate(update);
+    }
+
+    /**
      * @return the number of the max priority in the array, each index represent a number of priority.<br>
      * Index 0 for COMPUTATIONAL, if is 0 continue.<br>
      * Index 1 for IO, if is 0 continue.<br>
      * Index 2 for OTHER, if is 0 continue.<br>
+     * Repeat until the last index.<br>
      * Else return 0;
      */
-    public int getCurrentMax(){
-        for (int i = 0; i < 10; i++) {
-            if (arrayOfPriority[i] > 0)
-                return i+1;
-        }
-        return 0;
-    }
-
-    /**
-     * This a method of lang.Object class, and it is used to compare two objects.<br>
-     * To compare two objects that whether they are the same, it compares the values of both the object's attributes.
-     * @param o other object to check.
-     * @return True or False
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CustomExecutor that)) return false;
-        return Arrays.equals(arrayOfPriority, that.arrayOfPriority) && defaultType == that.defaultType;
-    }
-
-    /**
-     * The hashcode() method returns the same hash value when called on two objects, which are equal according to the equals() method.<br>
-     * And if the objects are unequal, it usually returns different hash values.
-     * @return result value.
-     */
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(defaultType);
-        result = 31 * result + Arrays.hashCode(arrayOfPriority);
-        return result;
+    public int getCurrentMax() {
+        return priorityData.getCurrentMax();
     }
 }
