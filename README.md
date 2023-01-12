@@ -19,7 +19,7 @@ helps to minimize coupling between modules and make the code more flexible.
 Together, these five principles make up the SOLID principles, and they can help you to write code that is more maintainable, testable, and scalable.
 In this project we show different ways to working with the Thread class.
 
-### Thread
+## Thread
 All programmers are familiar with writing sequential programs. You’ve probably written a program that displays "Hello World!" or sorts a list of names or
 computes a list of prime numbers. These are sequential programs.    
 That is, each has a beginning, an execution sequence, and an end. At any given time during the runtime of the program,      
@@ -41,7 +41,7 @@ But if we directly call the run() method then no new thread will be created and 
 calling thread itself and no multi-threading will take place.
 
 
-### Thread Pool
+## Thread Pool
 A thread pool is a managed collection of threads that are available to perform tasks. Thread pools usually provide:  
 * Improved performance when executing large numbers of tasks due to reduced per-task invocation overhead.  
 * A means of bounding the resources, including threads, consumed when executing a collection of tasks.
@@ -49,13 +49,13 @@ A thread pool is a managed collection of threads that are available to perform t
 In addition, thread pools relieve you from having to manage the life cycle of threads.   
 They allow to take advantage of threading, but focus on the tasks that you want the threads to perform, instead of the thread mechanics.
 
-### Callable
+## Callable
 A task that returns a result and may throw an exception. Implementors define a single method with no arguments called call.  
 The Callable interface is similar to Runnable, in that both are designed for classes whose instances are potentially executed by another thread.  
 A Runnable, however, does not return a result and cannot throw a checked exception.  
 The Executors class contains utility methods to convert from other common forms to Callable classes.
 
-### Future
+## Future
 When the __call()__ method completes, answer must be stored in an object known to the main thread, so that the main thread can know about the result that 
 the thread returned. How will the program store and obtain this result later?  
 For this, a Future object can be used. Think of a Future as an object that holds the result – it may not hold it right now, but it will do so in the future 
@@ -75,7 +75,7 @@ Each task has a priority used for scheduling inferred from the integer value of 
 the section 1 to a priority queue, and a method for submitting a generic task created by a
 Callable<V> and a Type, passed as arguments. 
 
-### Enum
+## Enum
 In Java, an enumerated type (or "enum") is a class that defines a finite set of enumerated values.  
 These values are instances of the enum class and are usually used when a variable can only take on one of a small set of possible values.  
 Enums are defined using the enum keyword, followed by a list of enumerated values in curly braces. Each enumerated value is separated by a comma and by 
