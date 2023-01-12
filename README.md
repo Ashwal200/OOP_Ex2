@@ -83,7 +83,7 @@ default are final and static.
 
 
 
-
+#### In order to understand which process is faster, we did some tests on the functions we built and the results is:
 Number of files | NOL | NOL with thread | NOL with threadPool
 | :--- | :---: | :---: | :---:
 300  | 0.135 | 0.110 | 0.102
@@ -106,3 +106,8 @@ parallel across multiple processors, allowing for even greater speedup.
 It's important to note that not all cases a thread will run faster than a normal function, It depends on the specific situation and on the resources that 
 the program needs to access.   
 
+### GetNumberOfLinesThreads  <kbd><</kbd> GetNumberOfLinesThreadPool
+Thread pool is faster than creating new threads because it avoids the overhead of creating and destroying threads. Thread pool maintains a collection of 
+worker threads, which are available to perform tasks. When a task is submitted, one of the worker threads is assigned to perform the task. This eliminates 
+the need to create a new thread for each task, which can be a time-consuming process. Additionally, thread pool also helps with managing and reusing 
+threads, which can improve performance and reduce resource usage.
