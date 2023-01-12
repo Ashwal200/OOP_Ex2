@@ -108,6 +108,18 @@ the program needs to access.
 
 ### GetNumberOfLinesThreads  <kbd><</kbd> GetNumberOfLinesThreadPool
 Thread pool is faster than creating new threads because it avoids the overhead of creating and destroying threads. Thread pool maintains a collection of 
-worker threads, which are available to perform tasks. When a task is submitted, one of the worker threads is assigned to perform the task. This eliminates 
-the need to create a new thread for each task, which can be a time-consuming process. Additionally, thread pool also helps with managing and reusing 
-threads, which can improve performance and reduce resource usage.
+worker threads, which are available to perform tasks.   
+When a task is submitted, one of the worker threads is assigned to perform the task. This eliminates the need to create a new thread for each task, which 
+can be a time-consuming process. Additionally, thread pool also helps with managing and reusing threads, which can improve performance and reduce resource 
+usage.
+
+
+# How to run the project
+In order to run this project follow this steps:
+  - Push on `code` and download the zip.
+  - Extract the zip file.
+  - Open a new java project.
+  - Write the file path.
+  - Open as project.
+  - You can use the test or make your own main.
+Now you can run the file successfully.
